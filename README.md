@@ -1,0 +1,1 @@
+# FatturaElettronica.Core
