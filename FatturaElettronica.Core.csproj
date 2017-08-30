@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
+    <Version>0.1</Version>
+    <Authors>Nicola Iarocci</Authors>
+    <Company>CIR 2000</Company>
+    <Product>FatturaElettronica.NET</Product>
+    <Copyright>Copyright © CIR2000 2017</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/FatturaElettronica/FatturaElettronica.Core/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>http://fatturaelettronicaopensource.org</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/FatturaElettronica/FatturaElettronica.Core</RepositoryUrl>
+    <PackageIconUrl />
+    <Description>Core services per la fatturazione elettronica sia tra privati che con la pubblica amministrazione italiana</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
