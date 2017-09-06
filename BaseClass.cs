@@ -70,7 +70,7 @@ namespace FatturaElettronica.Common
         /// <returns>Returns true if the object is empty; false otherwise.</returns>
         public virtual bool IsEmpty()
         {
-            // TODO support more data types.
+            // TODO support more data types. Also refactor: can be improved.
 
             var props = GetAllDataProperties().ToList();
             var i = 0;
@@ -90,6 +90,11 @@ namespace FatturaElettronica.Common
                     continue;
                 }
                 if (v is string && string.IsNullOrEmpty((string) v))
+                {
+                    i++;
+                    continue;
+                }
+                if (IsNumericType(prop.PropertyType) && v.Equals(0))
                 {
                     i++;
                     continue;
@@ -168,6 +173,20 @@ namespace FatturaElettronica.Common
         public override int GetHashCode()
         {
             return this.GetHashCodeFromFields(GetAllDataProperties());
+        }
+
+        private static HashSet<Type> NumericTypes = new HashSet<Type>
+        {
+            typeof(int),
+            typeof(uint),
+            typeof(double),
+            typeof(decimal),
+        };
+
+        internal static bool IsNumericType(Type type)
+        {
+            return NumericTypes.Contains(type) ||
+                   NumericTypes.Contains(Nullable.GetUnderlyingType(type));
         }
     }
     public static class ObjectExtensions
