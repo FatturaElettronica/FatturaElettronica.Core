@@ -27,7 +27,7 @@ namespace FatturaElettronica.Common
                 DecimalFormat = "0.00###"
             };
         }
-        protected BaseClassSerializable(XmlReader r) : this() { ReadXml(r); }
+        protected BaseClassSerializable(XmlReader r) : base() { ReadXml(r); }
 
         public XmlOptions XmlOptions { get; set; }
 

@@ -26,24 +26,20 @@ namespace FatturaElettronica.Common
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
-        /// A helper method that raises the PropertyChanged event for a property.
-        /// </summary>
-        protected virtual void NotifyChanged([CallerMemberName] string caller = "")
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
-            NotifyChanged(new[]{caller});
-        }
-
-        /// <summary>
-        /// A helper method that raises the PropertyChanged event for a property.
-        /// </summary>
-        /// <param name="propertyNames">The names of the properties that changed.</param>
-        protected virtual void NotifyChanged(params string[] propertyNames)
-        {
-            foreach (var name in propertyNames)
+            if (Equals(storage, value))
             {
-                OnPropertyChanged(new PropertyChangedEventArgs(name));
+                return false;
             }
+
+            storage = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -53,15 +49,6 @@ namespace FatturaElettronica.Common
         protected string CleanString(string s)
         {
             return (s ?? string.Empty).Trim();
-        }
-
-        /// <summary>
-        /// Raises the PropertyChanged event.
-        /// </summary>
-        /// <param name="e">Event arguments.</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(this, e);
         }
 
         /// <summary>
