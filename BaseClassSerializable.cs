@@ -55,16 +55,6 @@ namespace FatturaElettronica.Common
         public XmlSchema GetSchema() { return null; }
 
         /// <summary>
-        /// Serializes the current BusinessObject instance to a XML file.
-        /// </summary>
-        /// <param name="fileName">Name of the file to write to.</param>
-        public virtual void WriteXml(string fileName)
-        {
-            var settings = new XmlWriterSettings {Indent = true};
-            using (var writer = XmlWriter.Create(new System.Text.StringBuilder(fileName), settings)) { WriteXml(writer); }
-        }
-
-        /// <summary>
         /// Serializes the current BusinessObject instance to a XML stream.
         /// </summary>
         /// <param name="w">Active XML stream writer.</param>
