@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +13,7 @@ namespace FatturaElettronica.Common
 {
     /// <summary>
     /// - XML (de)serialization;
-    /// - JSON serialization.
+    /// - JSON (de)serialization.
     /// </summary>
     public class BaseClassSerializable : BaseClass, IXmlSerializable
     {
@@ -32,6 +33,215 @@ namespace FatturaElettronica.Common
         [JsonIgnore]
         public XmlOptions XmlOptions { get; set; }
 
+        readonly Stack<JsonProperty> _stack = new Stack<JsonProperty>();
+
+        /// <summary>
+        /// Deserializes the current BusinessObject from a json stream.
+        /// </summary>
+        /// <param name="r">Active json stream reader</param>
+        /// <remarks>Side effects on parse handling</remarks>
+        public virtual void ReadJson(JsonReader r)
+        {
+            _stack.Clear();
+
+            r.FloatParseHandling = FloatParseHandling.Decimal;
+
+            JsonProperty current;
+            Type objectType, elementType;
+            PropertyInfo prop = null;
+
+            while (r.Read())
+            {
+                switch (r.TokenType)
+                {
+                    case JsonToken.StartObject:
+
+                        current = null;
+                        if (_stack.Count() > 0)
+                            current = _stack.Peek();
+
+                        if (current != null)
+                        {
+                            current.Child = prop;
+                            objectType = current.Child.PropertyType;
+
+                            if (objectType.IsGenericList())
+                            {
+                                elementType = objectType.GetTypeInfo().GenericTypeArguments.Single();
+
+                                var newObject = Activator.CreateInstance(elementType);
+
+                                var add = objectType.GetMethod("Add");
+                                add.Invoke(current.Value, new[] { newObject });
+
+                                current = new JsonProperty(newObject);
+                            }
+                            else
+                            {
+                                if (!objectType.IsSubclassOfBusinessObject())
+                                    throw new JsonParseException($"Unexpected property type {objectType.FullName}", r);
+
+                                current = new JsonProperty(current.Child.GetValue(current.Value, null));
+
+                            }
+
+                        }
+                        else
+                            current = new JsonProperty(this);
+
+                        _stack.Push(current);
+
+                        break;
+                    case JsonToken.EndObject:
+
+                        if (_stack.Count > 0)
+                            _stack.Pop();
+
+                        // Restore parent property from stack
+                        prop = null;
+                        if (_stack.Count > 1)
+                            prop = _stack.ElementAt(1).Child;
+
+                        break;
+                    case JsonToken.PropertyName:
+
+                        if (_stack.Count() == 0)
+                            throw new JsonParseException($"Malformed JSON", r);
+
+                        current = _stack.Peek();
+
+                        var name = (string)r.Value;
+                        prop = GetPropertyInfo((BaseClassSerializable)current.Value, name);
+
+                        if (prop == null)
+                            throw new JsonParseException($"Unexpected property {name}", r);
+
+                        current.Child = prop;
+
+                        break;
+                    case JsonToken.StartArray:
+
+                        current = null;
+                        if (_stack.Count() > 0)
+                            current = _stack.Peek();
+
+                        if (current != null && current.Child != null)
+                        {
+                            objectType = current.Child.PropertyType;
+
+                            if (!objectType.IsGenericList())
+                                throw new JsonParseException($"Unexpected property type {objectType.FullName}", r);
+
+                            elementType = objectType.GetTypeInfo().GenericTypeArguments.Single();
+
+                            var value = current.Child.GetValue(current.Value, null);
+
+                            var clear = objectType.GetMethod("Clear");
+                            clear.Invoke(value, null);
+
+                            current = new JsonProperty(current.Child, value);
+                        }
+                        else
+                            current = new JsonProperty(this);
+
+                        _stack.Push(current);
+
+                        break;
+
+                    case JsonToken.EndArray:
+
+                        if (_stack.Count > 0)
+                            _stack.Pop();
+
+                        // Restore parent property from stack
+                        prop = null;
+                        if (_stack.Count > 1)
+                            prop = _stack.ElementAt(1).Child;
+
+                        break;
+                    case JsonToken.Integer:
+                    case JsonToken.Float:
+                    case JsonToken.String:
+                    case JsonToken.Boolean:
+                    case JsonToken.Null:
+                    case JsonToken.Date:
+
+                        current = null;
+                        if (_stack.Count() > 0)
+                            current = _stack.Peek();
+
+                        if (current != null)
+                        {
+                            objectType = prop.PropertyType;
+
+                            if (current.Value.GetType().IsGenericList())
+                            {
+                                elementType = objectType.GetTypeInfo().GenericTypeArguments.Single();
+
+                                var add = objectType.GetMethod("Add");
+                                var value = Cast(elementType, r.Value);
+
+                                add.Invoke(current.Value, new[] { value });
+                            }
+                            else
+                            {
+                                var value = Cast(objectType, r.Value);
+                                current.Child.SetValue(current.Value, value, null);
+                            }
+                        }
+                        else
+                            throw new JsonParseException($"Malformed JSON", r);
+
+                        break;
+                    default:
+                        throw new JsonParseException($"Unexpected token {r.TokenType}", r);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Helper method to cast json properties
+        /// </summary>
+        /// <param name="target">target type</param>
+        /// <param name="value">source value</param>
+        /// <returns></returns>
+        private static object Cast(Type target, object value)
+        {
+            if (target == typeof(Int32) || target == typeof(Int32?))
+                return Convert.ToInt32(value);
+
+            if (target == typeof(Decimal) || target == typeof(Decimal?))
+                return Convert.ToDecimal(value);
+
+            return value;
+        }
+
+        /// <summary>
+        /// Helper method to get a named property
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private static PropertyInfo GetPropertyInfo(BaseClassSerializable value, string name)
+        {
+            var type = value.GetType();
+
+            var properties = value.GetAllDataProperties().ToList();
+
+            // XmlElementAttribute comes first
+            var property = properties
+                    .Where(prop => prop.GetCustomAttributes(typeof(XmlElementAttribute), false)
+                        .Where(ca => ((XmlElementAttribute)ca).ElementName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                        .Any())
+                    .FirstOrDefault();
+
+            // Fallback to property name
+            if (property == null)
+                property = properties.FirstOrDefault(n => n.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            return property;
+        }
+        
         /// <summary>
         /// Serializes the instance to JSON
         /// </summary>
@@ -248,6 +458,27 @@ namespace FatturaElettronica.Common
                 {
                     add.Invoke(propertyValue, new[] { r.ReadElementContentAs(argumentType, null) });
                 }
+            }
+        }
+
+        private class JsonProperty
+        {
+            public PropertyInfo Child { get; set; }
+            public object Value { get; set; }
+
+            public JsonProperty(PropertyInfo property, object value)
+            {
+                this.Child = property;
+                this.Value = value;
+            }
+
+            public JsonProperty(object value) : this(null, value)
+            {
+            }
+
+            public override string ToString()
+            {
+                return String.Format("Child {0} - Value {1}", Child, Value);
             }
         }
     }
