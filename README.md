@@ -6,4 +6,4 @@ Questo package viene usato dai seguenti prodotti:
 - [Spesometro.NET][2]
 
 [1]: http://fatturaelettronicaopensource.org
-[2]: 
+[2]: https://github.com/FatturaElettronica/Spesometro.NET
