@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.3
+====
+
+- Json: do not serialize the `XmlOptions` property.
+
 v0.2
 ====
 

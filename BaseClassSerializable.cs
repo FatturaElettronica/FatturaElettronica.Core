@@ -29,6 +29,7 @@ namespace FatturaElettronica.Common
         }
         protected BaseClassSerializable(XmlReader r) : base() { ReadXml(r); }
 
+        [JsonIgnore]
         public XmlOptions XmlOptions { get; set; }
 
         /// <summary>
@@ -66,13 +67,14 @@ namespace FatturaElettronica.Common
                 var attribute = property.GetCustomAttributes(typeof(XmlElementAttribute), false)
                     .Cast<XmlElementAttribute>()
                     .FirstOrDefault();
-                var propertyName = attribute == null ?  property.Name : attribute.ElementName;
+                var propertyName = attribute == null ? property.Name : attribute.ElementName;
 
                 var value = property.GetValue(this, null);
                 if (value == null && !XmlOptions.SerializeNullValues) continue;
 
                 var child = value as BaseClassSerializable;
-                if (child != null) {
+                if (child != null)
+                {
                     if (child.IsEmpty() && XmlOptions.SerializeEmptyBusinessObjects == false) continue;
 
                     w.WriteStartElement(propertyName);
@@ -88,25 +90,30 @@ namespace FatturaElettronica.Common
                     continue;
                 }
 
-                if (value is string) {
-                    if (!string.IsNullOrEmpty(value.ToString()) || XmlOptions.SerializeEmptyStrings) {
-                       w.WriteElementString(propertyName, value.ToString());
+                if (value is string)
+                {
+                    if (!string.IsNullOrEmpty(value.ToString()) || XmlOptions.SerializeEmptyStrings)
+                    {
+                        w.WriteElementString(propertyName, value.ToString());
                     }
                     continue;
                 }
-                if (value is DateTime && XmlOptions.DateTimeFormat != null && !property.GetCustomAttributes<IgnoreXmlDateFormat>().Any()) {
+                if (value is DateTime && XmlOptions.DateTimeFormat != null && !property.GetCustomAttributes<IgnoreXmlDateFormat>().Any())
+                {
                     w.WriteElementString(propertyName, ((DateTime)value).ToString(XmlOptions.DateTimeFormat));
                     continue;
                 }
-                if (value is decimal && XmlOptions.DecimalFormat != null) {
+                if (value is decimal && XmlOptions.DecimalFormat != null)
+                {
                     w.WriteElementString(propertyName, ((decimal)value).ToString(XmlOptions.DecimalFormat, CultureInfo.InvariantCulture));
                     continue;
                 }
 
                 // all else fail so just let the value flush straight to XML.
                 w.WriteStartElement(propertyName);
-                if (value != null) { 
-                    w.WriteValue(value); 
+                if (value != null)
+                {
+                    w.WriteValue(value);
                 }
                 w.WriteEndElement();
             }
@@ -123,19 +130,22 @@ namespace FatturaElettronica.Common
             var type = value.GetType();
             var e = type.GetMethod("GetEnumerator").Invoke(value, null) as IEnumerator;
 
-            while (e != null && e.MoveNext()) {
+            while (e != null && e.MoveNext())
+            {
                 if (e.Current == null) continue;
                 var current = e.Current;
                 w.WriteStartElement(propertyName);
                 {
-                    if (current is BaseClassSerializable) {
+                    if (current is BaseClassSerializable)
+                    {
                         ((BaseClassSerializable)current).WriteXml(w);
                     }
                     else if (current is string)
                     {
-                        w.WriteString((string) current);
+                        w.WriteString((string)current);
                     }
-                    else {
+                    else
+                    {
                         w.WriteValue(e.Current);
                     }
                 }
@@ -151,12 +161,13 @@ namespace FatturaElettronica.Common
         public virtual void ReadXml(XmlReader r)
         {
             var isEmpty = r.IsEmptyElement;
-            
+
             r.ReadStartElement();
             if (isEmpty) return;
 
             var properties = GetAllDataProperties().ToList();
-            while (r.NodeType == XmlNodeType.Element) {
+            while (r.NodeType == XmlNodeType.Element)
+            {
 
                 var property = properties
                     .Where(prop => prop.GetCustomAttributes(typeof(XmlElementAttribute), false)
@@ -164,7 +175,8 @@ namespace FatturaElettronica.Common
                     .FirstOrDefault();
                 if (property == null)
                     property = properties.FirstOrDefault(n => n.Name.Equals(r.Name));
-                if (property == null) {
+                if (property == null)
+                {
                     r.Skip();
                     continue;
                 }
@@ -186,9 +198,9 @@ namespace FatturaElettronica.Common
                 }
 
                 // ReadElementContentAs won't accept a nullable types.
-                if (type == typeof(DateTime?)) type = typeof(DateTime); 
-                if (type == typeof(decimal?)) type = typeof(decimal); 
-                if (type == typeof(int?)) type = typeof(int); 
+                if (type == typeof(DateTime?)) type = typeof(DateTime);
+                if (type == typeof(decimal?)) type = typeof(decimal);
+                if (type == typeof(int?)) type = typeof(int);
 
                 property.SetValue(this, r.ReadElementContentAs(type, null), null);
             }
@@ -228,7 +240,7 @@ namespace FatturaElettronica.Common
 
                 if (argumentType == typeof(string))
                 {
-                    add.Invoke(propertyValue, new [] { r.ReadElementContentAsString() });
+                    add.Invoke(propertyValue, new[] { r.ReadElementContentAsString() });
                     continue;
                 }
 
