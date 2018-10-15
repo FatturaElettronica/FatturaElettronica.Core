@@ -4,6 +4,7 @@ Changelog
 v0.3
 ====
 
+- CI integration. Closes #3.
 - Add basic XML de-serialization test.
 - Json: do not serialize the `XmlOptions` property.
 
