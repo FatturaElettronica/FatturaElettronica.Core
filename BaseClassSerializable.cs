@@ -40,7 +40,7 @@ namespace FatturaElettronica.Common
         /// </summary>
         /// <param name="r">Active json stream reader</param>
         /// <remarks>Side effects on parse handling</remarks>
-        public virtual void ReadJson(JsonReader r)
+        public virtual void FromJson(JsonReader r)
         {
             _stack.Clear();
 
@@ -241,7 +241,7 @@ namespace FatturaElettronica.Common
 
             return property;
         }
-        
+
         /// <summary>
         /// Serializes the instance to JSON
         /// </summary>

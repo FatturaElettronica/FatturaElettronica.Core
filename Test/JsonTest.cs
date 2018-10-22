@@ -19,7 +19,7 @@ namespace Test
 
 
             var challenge = new TestMe();
-            challenge.ReadJson(new JsonTextReader(new StringReader(json)));
+            challenge.FromJson(new JsonTextReader(new StringReader(json)));
 
             Assert.AreEqual(original.AString, challenge.AString);
             Assert.AreEqual(original.ADate, challenge.ADate);
