@@ -6,6 +6,7 @@ v0.3
 
 - New: Json deserialization
 - New: CI integration. Closes #3.
+- New Add basic Json de-serialization test.
 - New: Add basic XML de-serialization test.
 - Fix: Json: do not serialize the `XmlOptions` property.
 
