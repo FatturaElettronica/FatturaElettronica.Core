@@ -4,6 +4,8 @@ Changelog
 v0.3
 ====
 
+Released on October 22, 2018.
+
 - New: FromJson() method for JSON de-serialization
 - New Add basic Json de-serialization test.
 - New: Add basic XML de-serialization test.
