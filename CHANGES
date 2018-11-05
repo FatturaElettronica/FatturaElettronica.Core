@@ -4,6 +4,8 @@ Changelog
 v0.5
 ====
 
+Released on November 5, 2018.
+
 - Fix: `XmlOptions` is now protected, thus not de(serializable). Closes #8.
 
 v0.4
