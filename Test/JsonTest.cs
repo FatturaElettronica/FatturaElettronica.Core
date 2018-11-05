@@ -17,6 +17,7 @@ namespace Test
             original.SubTestMe.ADate = DateTime.Now.AddDays(+1);
             var json = original.ToJson();
 
+            Assert.IsFalse(json.Contains("XmlOptions"));
 
             var challenge = new TestMe();
             challenge.FromJson(new JsonTextReader(new StringReader(json)));

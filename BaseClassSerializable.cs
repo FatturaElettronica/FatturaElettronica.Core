@@ -30,8 +30,7 @@ namespace FatturaElettronica.Common
         }
         protected BaseClassSerializable(XmlReader r) : base() { ReadXml(r); }
 
-        [JsonIgnore]
-        public XmlOptions XmlOptions { get; set; }
+        protected XmlOptions XmlOptions { get; set; }
 
         readonly Stack<JsonProperty> _stack = new Stack<JsonProperty>();
 
