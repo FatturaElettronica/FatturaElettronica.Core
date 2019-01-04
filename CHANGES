@@ -4,6 +4,8 @@ Changelog
 v1.1
 ====
 
+Released on January 4, 2019.
+
 - New: NetStandard 2.0 added to target frameworks (Federico Dipuma).
 - New: Improve error handling in JSON deserialization (Emanuele Zavallone).
 
