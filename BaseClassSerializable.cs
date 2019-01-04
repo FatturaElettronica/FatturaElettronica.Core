@@ -72,7 +72,16 @@ namespace FatturaElettronica.Common
                                 var newObject = Activator.CreateInstance(elementType);
 
                                 var add = objectType.GetMethod("Add");
-                                add.Invoke(current.Value, new[] { newObject });
+
+                                try
+                                {
+                                    add.Invoke(current.Value, new[] { newObject });
+                                }
+                                catch (Exception)
+                                {
+                                    throw new JsonParseException($"Unexpected element type {elementType}", r);
+                                }
+
 
                                 current = new JsonProperty(newObject);
                             }
@@ -181,7 +190,15 @@ namespace FatturaElettronica.Common
                                 var add = objectType.GetMethod("Add");
                                 var value = Cast(elementType, r.Value);
 
-                                add.Invoke(current.Value, new[] { value });
+                                try
+                                {
+                                    add.Invoke(current.Value, new[] { value });
+                                }
+                                catch (Exception)
+                                {
+                                    throw new JsonParseException($"Unexpected element type {elementType}", r);
+                                }
+
                             }
                             else
                             {
