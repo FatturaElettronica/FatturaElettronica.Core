@@ -5,6 +5,7 @@ v1.1
 ====
 
 - New: NetStandard 2.0 added to target frameworks (Federico Dipuma).
+- New: Improve error handling in JSON deserialization (Emanuele Zavallone).
 
 v1.0
 ====
