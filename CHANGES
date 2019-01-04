@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.1
+====
+
+- New: NetStandard 2.0 added to target frameworks (Federico Dipuma).
+
 v1.0
 ====
 
