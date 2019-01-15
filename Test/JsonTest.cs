@@ -12,9 +12,10 @@ namespace Test
         [TestMethod]
         public void JsonDeSerialize()
         {
-            var original = new TestMe { AString = "a string", ADate = DateTime.Now };
+            var original = new TestMe { AString = "a string", ADate = DateTime.Now, ADecimal = 0.1234567m };
             original.SubTestMe.AString = "a sub string";
             original.SubTestMe.ADate = DateTime.Now.AddDays(+1);
+            original.SubTestMe.ADecimal = 0.987654321m;
             var json = original.ToJson();
 
             Assert.IsFalse(json.Contains("XmlOptions"));
@@ -24,8 +25,10 @@ namespace Test
 
             Assert.AreEqual(original.AString, challenge.AString);
             Assert.AreEqual(original.ADate, challenge.ADate);
+            Assert.AreEqual(original.ADecimal, challenge.ADecimal);
             Assert.AreEqual(original.SubTestMe.AString, challenge.SubTestMe.AString);
             Assert.AreEqual(original.SubTestMe.ADate, challenge.SubTestMe.ADate);
+            Assert.AreEqual(original.SubTestMe.ADecimal, challenge.SubTestMe.ADecimal);
         }
     }
 }

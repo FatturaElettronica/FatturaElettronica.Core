@@ -10,12 +10,13 @@ namespace Test
         [TestMethod]
         public void XmlDeSerialize()
         {
-            var original = new TestMe { AString = "a string", ADate = DateTime.Now };
+            var original = new TestMe { AString = "a string", ADate = DateTime.Now, ADecimal = 0.1234567m };
             original.SubTestMe.AString = "a sub string";
             original.SubTestMe.ADate = DateTime.Now.AddDays(+1);
+            original.SubTestMe.ADecimal = 0.987654321m;
 
-            var tempFile = "test.xml";
-            using (var w = XmlWriter.Create(tempFile ))
+           var tempFile = "test.xml";
+            using (var w = XmlWriter.Create(tempFile))
             {
                 original.WriteXml(w);
             }
@@ -28,8 +29,11 @@ namespace Test
 
             Assert.AreEqual(original.AString, challenge.AString);
             Assert.AreEqual(original.ADate.Date, challenge.ADate);
+            Assert.AreEqual(original.ADecimal, challenge.ADecimal);
             Assert.AreEqual(original.SubTestMe.AString, challenge.SubTestMe.AString);
             Assert.AreEqual(original.SubTestMe.ADate.Date, challenge.SubTestMe.ADate);
+            Assert.AreEqual(original.SubTestMe.ADate.Date, challenge.SubTestMe.ADate);
+            Assert.AreEqual(original.SubTestMe.ADecimal, challenge.SubTestMe.ADecimal);
         }
     }
 }

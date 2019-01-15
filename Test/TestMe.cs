@@ -10,6 +10,8 @@ namespace Test
         [DataProperty]
         public DateTime ADate { get; set; }
         [DataProperty]
+        public decimal ADecimal { get; set; }
+        [DataProperty]
         public SubTestMe SubTestMe { get; } = new SubTestMe();
         public override void WriteXml(System.Xml.XmlWriter w)
         {
@@ -24,5 +26,7 @@ namespace Test
         public string AString { get; set; }
         [DataProperty]
         public DateTime ADate { get; set; }
+        [DataProperty]
+        public decimal ADecimal { get; set; }
     }
 }
