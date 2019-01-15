@@ -10,10 +10,10 @@ namespace Test
         [TestMethod]
         public void XmlDeSerialize()
         {
-            var original = new TestMe { AString = "a string", ADate = DateTime.Now, ADecimal = 0.1234567m };
+            var original = new TestMe { AString = "a string", ADate = DateTime.Now, ADecimal = 0.12345678m };
             original.SubTestMe.AString = "a sub string";
             original.SubTestMe.ADate = DateTime.Now.AddDays(+1);
-            original.SubTestMe.ADecimal = 0.987654321m;
+            original.SubTestMe.ADecimal = 0.98765432m;
 
            var tempFile = "test.xml";
             using (var w = XmlWriter.Create(tempFile))
