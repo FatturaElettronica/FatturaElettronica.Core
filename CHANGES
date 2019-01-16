@@ -1,6 +1,11 @@
 Changelog
 =========
 
+In development
+===============
+
+- Fix: XmlOptions.DecimalFormat should support up to 8 decimals (Claudio Lepri). Pull #15.
+
 v1.1
 ====
 
