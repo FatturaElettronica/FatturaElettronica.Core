@@ -4,6 +4,11 @@ Changelog
 In development
 ===============
 
+v1.1.1
+======
+
+Released on January 16, 2019.
+
 - Fix: XmlOptions.DecimalFormat should support up to 8 decimals (Claudio Lepri). Pull #15.
 
 v1.1
