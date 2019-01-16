@@ -26,7 +26,7 @@ namespace FatturaElettronica.Common
             XmlOptions = new XmlOptions()
             {
                 DateTimeFormat = "yyyy-MM-dd",
-                DecimalFormat = "0.00###"
+                DecimalFormat = "0.00######"
             };
         }
         protected BaseClassSerializable(XmlReader r) : base() { ReadXml(r); }
