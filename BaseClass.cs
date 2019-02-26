@@ -86,6 +86,11 @@ namespace FatturaElettronica.Common
                     i++;
                     continue;
                 }
+                if (v is DateTime && v.Equals(DateTime.MinValue))
+                {
+                    i++;
+                    continue;
+                }
                 if (v is BaseClass && ((BaseClass)v).IsEmpty()) { 
                     i++;
                 }
