@@ -4,7 +4,8 @@ Changelog
 In development
 ===============
 
--Fix: XML de-serialization crash if text fillers (spaces and/or black lines) are included between nodes. Closes #23.
+- Fix: JSON: null fields that map to instances of BaseClassSerializable should not be deserialized. Closes #17.
+- Fix: XML de-serialization crash if text fillers (spaces and/or black lines) are included between nodes. Closes #23.
 
 v1.1.2
 ======

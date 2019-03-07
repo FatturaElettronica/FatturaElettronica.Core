@@ -30,5 +30,16 @@ namespace Test
             Assert.AreEqual(original.SubTestMe.ADate, challenge.SubTestMe.ADate);
             Assert.AreEqual(original.SubTestMe.ADecimal, challenge.SubTestMe.ADecimal);
         }
+        [TestMethod]
+        public void JsonDoNotDeserializeNullBaseClassSerializabileTypes()
+        {
+            // https://github.com/FatturaElettronica/FatturaElettronica.Core/issues/17
+            var json = "{\"AString\":\"a string\",\"ADate\":\"2019-03-07T17:01:52.769539+01:00\",\"ADecimal\":0.12345678,\"SubTestMe\":null}";
+
+            var challenge = new TestMe();
+            challenge.FromJson(new JsonTextReader(new StringReader(json)));
+
+            Assert.IsNotNull(challenge.SubTestMe);
+        }
     }
 }
