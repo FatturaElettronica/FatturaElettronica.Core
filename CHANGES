@@ -4,6 +4,8 @@ Changelog
 In development
 ===============
 
+-Fix: XML de-serialization crash if text fillers (spaces and/or black lines) are included between nodes. Closes #23.
+
 v1.1.2
 ======
 

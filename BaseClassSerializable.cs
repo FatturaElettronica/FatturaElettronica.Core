@@ -424,13 +424,14 @@ namespace FatturaElettronica.Common
                     continue;
                 }
 
-                // ReadElementContentAs won't accept a nullable types.
+                // ReadElementContentAs won't accept a nullable type.
                 if (type == typeof(DateTime?)) type = typeof(DateTime);
                 if (type == typeof(decimal?)) type = typeof(decimal);
                 if (type == typeof(int?)) type = typeof(int);
 
                 property.SetValue(this, r.ReadElementContentAs(type, null), null);
             }
+            if (r.NodeType == XmlNodeType.Text) r.Skip();
             r.ReadEndElement();
         }
 
