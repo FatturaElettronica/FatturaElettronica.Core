@@ -7,5 +7,5 @@ Questo package viene usato dai seguenti prodotti:
 - [FatturaElettronica.NET][1]
 - [Spesometro.NET][2]
 
-[1]: http://fatturaelettronicaopensource.org
+[1]: https://fatturaelettronicaopensource.org
 [2]: https://github.com/FatturaElettronica/Spesometro.NET
