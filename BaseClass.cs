@@ -121,7 +121,8 @@ namespace FatturaElettronica.Common
                 var v1 = prop.GetValue(this, null);
                 var v2 = prop.GetValue(other, null);
 
-                if (prop.PropertyType.IsGenericList()) { 
+                if (prop.PropertyType.IsGenericList()
+                  && prop.PropertyType == typeof(List<string>)) { 
                     // We only support List<string>.
                     if (!((List<string>) v1).SequenceEqual((List<string>) v2)) {
                         return false;

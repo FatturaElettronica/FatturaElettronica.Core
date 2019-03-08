@@ -4,6 +4,7 @@ Changelog
 In development
 ===============
 
+- Fix: InvalidCastException quando la lista non è di tipo string (Frediani). Pull #24.
 - Fix: XML de-serialization crash if text fillers (spaces and/or black lines) are included between nodes. Closes #23.
 - Bump Microsoft.NET.Test.Sdk to 16.0.1.
 - Bump Newtonsoft.Json to 12.0.1.
