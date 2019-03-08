@@ -5,6 +5,7 @@ In development
 ===============
 
 - Fix: XML de-serialization crash if text fillers (spaces and/or black lines) are included between nodes. Closes #23.
+- Bump Newtonsoft.Json to 12.0.1.
 - Bump MSTest.TestFramework to 1.4.0.
 - Bump MSTest.TestAdapter to 1.4.0.
 
