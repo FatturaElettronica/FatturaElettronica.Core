@@ -12,7 +12,7 @@ namespace Test
         [DataProperty]
         public decimal ADecimal { get; set; }
         [DataProperty]
-        public SubTestMe SubTestMe { get; set; } = new SubTestMe();
+        public SubTestMe SubTestMe { get; } = new SubTestMe();
         public override void WriteXml(System.Xml.XmlWriter w)
         {
             w.WriteStartElement("test");

@@ -203,10 +203,6 @@ namespace FatturaElettronica.Common
                             else
                             {
                                 var value = Cast(objectType, r.Value);
-                                if (prop.PropertyType.IsSubclassOfBusinessObject() && value == null)
-                                {
-                                    break;
-                                }
                                 current.Child.SetValue(current.Value, value, null);
                             }
                         }
