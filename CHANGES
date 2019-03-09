@@ -11,6 +11,8 @@ In development
 - Bump MSTest.TestFramework to 1.4.0.
 - Bump MSTest.TestAdapter to 1.4.0.
 
+- CI: switch from AppVeyor to Azure Pipelines. Closes #25.
+
 v1.1.2
 ======
 
