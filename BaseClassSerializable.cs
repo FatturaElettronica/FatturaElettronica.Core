@@ -393,51 +393,45 @@ namespace FatturaElettronica.Common
             if (isEmpty) return;
 
             var properties = GetAllDataProperties().ToList();
-            while (r.NodeType != XmlNodeType.EndElement)
+            while (r.NodeType == XmlNodeType.Element)
             {
-                while (r.NodeType == XmlNodeType.Element)
+
+                var property = properties
+                    .Where(prop => prop.GetCustomAttributes(typeof(XmlElementAttribute), false)
+                        .Where(ca => ((XmlElementAttribute)ca).ElementName == r.Name).Any())
+                    .FirstOrDefault();
+                if (property == null)
+                    property = properties.FirstOrDefault(n => n.Name.Equals(r.Name));
+                if (property == null)
                 {
-
-                    var property = properties
-                        .Where(prop => prop.GetCustomAttributes(typeof(XmlElementAttribute), false)
-                            .Where(ca => ((XmlElementAttribute)ca).ElementName == r.Name).Any())
-                        .FirstOrDefault();
-                    if (property == null)
-                        property = properties.FirstOrDefault(n => n.Name.Equals(r.Name));
-                    if (property == null)
-                    {
-                        r.Skip();
-                        continue;
-                    }
-
-                    var type = property.PropertyType;
-                    var value = property.GetValue(this, null);
-
-                    if (type.IsSubclassOfBusinessObject())
-                    {
-                        ((BaseClassSerializable)value).ReadXml(r);
-                        continue;
-                    }
-
-                    // if property type is List<T>, try to fetch the list from XML.
-                    if (type.IsGenericList())
-                    {
-                        ReadXmlList(value, type, r.Name, r);
-                        continue;
-                    }
-
-                    // ReadElementContentAs won't accept a nullable type.
-                    if (type == typeof(DateTime?)) type = typeof(DateTime);
-                    if (type == typeof(decimal?)) type = typeof(decimal);
-                    if (type == typeof(int?)) type = typeof(int);
-
-                    property.SetValue(this, r.ReadElementContentAs(type, null), null);
+                    r.Skip();
+                    continue;
                 }
-                if (r.NodeType == XmlNodeType.Text) r.Skip();
-                if (r.NodeType == XmlNodeType.Whitespace) r.Skip();
-                if (r.NodeType == XmlNodeType.Comment) r.Skip();
-                if (r.NodeType == XmlNodeType.ProcessingInstruction) r.Skip();
+
+                var type = property.PropertyType;
+                var value = property.GetValue(this, null);
+
+                if (type.IsSubclassOfBusinessObject())
+                {
+                    ((BaseClassSerializable)value).ReadXml(r);
+                    continue;
+                }
+
+                // if property type is List<T>, try to fetch the list from XML.
+                if (type.IsGenericList())
+                {
+                    ReadXmlList(value, type, r.Name, r);
+                    continue;
+                }
+
+                // ReadElementContentAs won't accept a nullable type.
+                if (type == typeof(DateTime?)) type = typeof(DateTime);
+                if (type == typeof(decimal?)) type = typeof(decimal);
+                if (type == typeof(int?)) type = typeof(int);
+
+                property.SetValue(this, r.ReadElementContentAs(type, null), null);
             }
+            if (r.NodeType == XmlNodeType.Text) r.Skip();
             r.ReadEndElement();
         }
 
