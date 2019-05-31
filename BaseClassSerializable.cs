@@ -141,8 +141,6 @@ namespace FatturaElettronica.Common
                             if (!objectType.IsGenericList())
                                 throw new JsonParseException($"Unexpected property type {objectType.FullName}", r);
 
-                            elementType = objectType.GetTypeInfo().GenericTypeArguments.Single();
-
                             var value = current.Child.GetValue(current.Value, null);
 
                             var clear = objectType.GetMethod("Clear");

@@ -18,7 +18,7 @@ namespace FatturaElettronica.Common
     /// TODO:
     /// - BeginEdit()/EndEdit() combination, and rollbacks for cancels (IEditableObject).
     /// </summary>
-    public abstract class BaseClass:  INotifyPropertyChanged, IEquatable<BaseClass>
+    public abstract class BaseClass : INotifyPropertyChanged, IEquatable<BaseClass>
     {
 
         /// <summary>
@@ -72,11 +72,12 @@ namespace FatturaElettronica.Common
                 }
 
                 var v = prop.GetValue(this, null);
-                if (v == null) {
+                if (v == null)
+                {
                     i++;
                     continue;
                 }
-                if (v is string && string.IsNullOrEmpty((string) v))
+                if (v is string && string.IsNullOrEmpty((string)v))
                 {
                     i++;
                     continue;
@@ -91,7 +92,8 @@ namespace FatturaElettronica.Common
                     i++;
                     continue;
                 }
-                if (v is BaseClass && ((BaseClass)v).IsEmpty()) { 
+                if (v is BaseClass && ((BaseClass)v).IsEmpty())
+                {
                     i++;
                 }
             }
@@ -117,20 +119,25 @@ namespace FatturaElettronica.Common
             if (other == null)
                 return false;
 
-            foreach (var prop in GetAllDataProperties()) {
+            foreach (var prop in GetAllDataProperties())
+            {
                 var v1 = prop.GetValue(this, null);
                 var v2 = prop.GetValue(other, null);
 
                 if (prop.PropertyType.IsGenericList()
-                  && prop.PropertyType == typeof(List<string>)) { 
+                  && prop.PropertyType == typeof(List<string>))
+                {
                     // We only support List<string>.
-                    if (!((List<string>) v1).SequenceEqual((List<string>) v2)) {
+                    if (!((List<string>)v1).SequenceEqual((List<string>)v2))
+                    {
                         return false;
-                    }    
-                } 
-                else {
+                    }
+                }
+                else
+                {
                     // Other types, and BusinessObject type.
-                    if ( v1 != v2 && !v1.Equals(v2)) {
+                    if (v1 != v2 && !v1.Equals(v2))
+                    {
                         return false;
                     }
                 }
@@ -147,15 +154,16 @@ namespace FatturaElettronica.Common
             return o != null && GetType().Name == o.GetType().Name && Equals(o);
         }
 
-        public static bool operator == (BaseClass o1, BaseClass o2)
+        public static bool operator ==(BaseClass o1, BaseClass o2)
         {
-            if ((object)o1 == null || ((object)o2) == null)
+
+            if (o1 is null || o2 is null)
                 return Equals(o1, o2);
 
             return o1.Equals(o2);
         }
 
-        public static bool operator != (BaseClass o1, BaseClass o2)
+        public static bool operator !=(BaseClass o1, BaseClass o2)
         {
             if (o1 == null || o2 == null)
                 return !Equals(o1, o2);
@@ -168,7 +176,7 @@ namespace FatturaElettronica.Common
             return this.GetHashCodeFromFields(GetAllDataProperties());
         }
 
-        private static HashSet<Type> NumericTypes = new HashSet<Type>
+        private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
         {
             typeof(int),
             typeof(uint),
@@ -192,7 +200,9 @@ namespace FatturaElettronica.Common
         /// <param name="obj">The object fro which the hash is being generated.</param>
         /// <param name="fields">The list of fields to include in the hash generation.</param>
         /// <returns></returns>
+#pragma warning disable IDE0060
         public static int GetHashCodeFromFields(this object obj, params object[] fields)
+#pragma warning restore IDE0060
         {
             unchecked
             { //unchecked to prevent throwing overflow exception

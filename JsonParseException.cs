@@ -8,15 +8,11 @@ namespace FatturaElettronica.Common
     /// </summary>
     public class JsonParseException : Exception
     {
-        private JsonReader reader;
-
         public int LineNumber { get; }
         public int LinePosition { get; }
 
         public JsonParseException(string message, JsonReader reader) : base(message)
         {
-            this.reader = reader;
-
             if (reader is JsonTextReader)
             {
                 var textReader = reader as JsonTextReader;
