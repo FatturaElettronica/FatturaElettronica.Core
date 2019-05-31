@@ -4,7 +4,8 @@ Changelog
 In development
 ===============
 
-- hic sunt leones.
+- Fix: XML de-serialization support for ProcessingInstruction node type. Closes #31.
+- Fix: XML de-serialization support for WhiteSpace and Comment node types. Closes #30.
 
 v 2.0
 =====
