@@ -467,18 +467,19 @@ namespace FatturaElettronica.Common
                     var bo = Activator.CreateInstance(argumentType);
                     ((BaseClassSerializable)bo).ReadXml(r);
                     add.Invoke(propertyValue, new[] { bo });
-                    continue;
+                    r.MoveToContent();
                 }
 
                 if (argumentType == typeof(string))
                 {
                     add.Invoke(propertyValue, new[] { r.ReadElementContentAsString() });
-                    continue;
+                    r.MoveToContent();
                 }
 
                 if (argumentType == typeof(int))
                 {
                     add.Invoke(propertyValue, new[] { r.ReadElementContentAs(argumentType, null) });
+                    r.MoveToContent();
                 }
             }
         }
