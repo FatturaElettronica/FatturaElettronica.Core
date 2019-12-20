@@ -25,6 +25,6 @@ Scopri come puoi partecipare sulla mia pagina [GitHub Sponsors][ghs]
 [1]: https://fatturaelettronicaopensource.org
 [2]: https://github.com/FatturaElettronica/Spesometro.NET
 [ghs]: https://github.com/sponsors/nicolaiarocci
-[bsd]: http://github.com/FatturaElettronica/FatturaElettronica.Extensions/blob/master/LICENSE.txt
+[bsd]: http://github.com/FatturaElettronica/FatturaElettronica.Core/blob/master/LICENSE.txt
 [ga]: http://gestionaleamica.com
 [ni]: https://nicolaiarocci.com
