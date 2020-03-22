@@ -120,7 +120,6 @@ namespace FatturaElettronica.Common
             foreach (var prop in GetAllDataProperties()) {
                 var v1 = prop.GetValue(this, null);
                 var v2 = prop.GetValue(other, null);
-
                 if (prop.PropertyType.IsGenericList()
                   && prop.PropertyType == typeof(List<string>)) { 
                     // We only support List<string>.
@@ -130,7 +129,7 @@ namespace FatturaElettronica.Common
                 } 
                 else {
                     // Other types, and BusinessObject type.
-                    if ( v1 != v2 && !v1.Equals(v2)) {
+                    if (v1 != null && v2 != null && v1 != v2 && !v1.Equals(v2)) {
                         return false;
                     }
                 }
