@@ -4,6 +4,13 @@ Changelog
 In development
 ===============
 
+- hic sunt leones.
+
+v 2.0.1
+=======
+
+Released on March 22, 2020
+
 - Fix: NullReference exception nel metodo Equals. Closes #42.
 
 v 2.0
