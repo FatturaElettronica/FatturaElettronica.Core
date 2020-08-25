@@ -2,6 +2,8 @@
 
 Core services per la fatturazione elettronica sia tra privati che con la pubblica amministrazione italiana.
 
+**Questo progetto è ora incorporato in [FatturaElettronica.NET][3] v3.0+. Di conseguenza il repository non viene più aggiornato.**
+
 Questo package viene usato dai seguenti prodotti:
 
 - [FatturaElettronica.NET][1]
@@ -24,6 +26,7 @@ Scopri come puoi partecipare sulla mia pagina [GitHub Sponsors][ghs]
 
 [1]: https://fatturaelettronicaopensource.org
 [2]: https://github.com/FatturaElettronica/Spesometro.NET
+[3]: https://github.com/FatturaElettronica/FatturaElettronica.NET
 [ghs]: https://github.com/sponsors/nicolaiarocci
 [bsd]: http://github.com/FatturaElettronica/FatturaElettronica.Core/blob/master/LICENSE.txt
 [ga]: http://gestionaleamica.com
